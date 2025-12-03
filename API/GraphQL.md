@@ -44,6 +44,12 @@ query {
 ```
 ## 3. Introspection queries
 Secure API has introspection disabled.
+
+Burp suite : 
+- GraphQL request
+  - tab - right click introspection query
+- GraphQL response
+  - right click - save queries to sitemap
 ```
  {
         "query": "{__schema{queryType{name}}}"
