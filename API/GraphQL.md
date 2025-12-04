@@ -55,6 +55,23 @@ Burp suite :
         "query": "{__schema{queryType{name}}}"
     }
 ```
+
+```
+query IntrospectionQuery {
+        __schema {
+            queryType {
+                name
+            }
+            mutationType {
+                name
+            }
+...
+...
+...
+```
+<details>
+        <summary>View full introspection query</summary>
+
 ```
 query IntrospectionQuery {
         __schema {
@@ -142,7 +159,10 @@ query IntrospectionQuery {
         }
     }
 ```
+</details>
+
 ### GraphQL Visualizer - online tool
+[GraphQL Voyager](https://apis.guru/graphql-voyager/)
 
 ### Suggestions
 Even if introspection is disabled, suggestion still active.
@@ -150,6 +170,20 @@ Even if introspection is disabled, suggestion still active.
 Tools: 
 - Clairvoyance
 - Burp scanner (GraphQL suggestions enabled)
+
+### Bypass introspection defenses
+Introspection disabled => maybe by using regex to exclude `__schema` keyword in queries.
+
+- special char after `__schema`
+- `__schema{` excluded, but
+  - ```{
+        "query": "query{__schema
+        {queryType{name}}}"
+    }
+    ``` 
+- GET / POST with x-www-form-urlencoded
+  - `GET /graphql?query=query%7B__schema%0A%7BqueryType%7Bname%7D%7D%7D` 
+
 
 
 
